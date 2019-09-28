@@ -22,7 +22,8 @@ class Cell:
         self.visited = True
 
 class Maze:
-    def __init__(self, rows, cols, cell_size, drawer):
+    def __init__(self, rows, cols, cell_size, drawer, debug=False):
+        self.debug = debug
         self.grid = []
         self.cell_size = cell_size
         self.width = cols
@@ -56,23 +57,22 @@ class Maze:
         current.visit()
         self.unvisited = self.unvisited - 1
         while self.unvisited:
-            self.draw()
-            print(current)
-            input()
+            if self.debug:
+                self.print_grid(current)
             neighbors = self.get_neighbors(current)
             if neighbors:
                 nextcell = neighbors[random.randint(0, len(neighbors)-1)]
                 if len(neighbors) > 1:
                     stack.append(current)
                 if current.x == nextcell.x:
-                    if current.y < nextcell.y:
+                    if current.y > nextcell.y:
                         current.walls['top'] = False
                         nextcell.walls['bottom'] = False
                     else:
                         current.walls['bottom'] = False
                         nextcell.walls['top'] = False
                 if current.y == nextcell.y:
-                    if current.x < nextcell.x:
+                    if current.x > nextcell.x:
                         current.walls['left'] = False
                         nextcell.walls['right'] = False
                     else:
@@ -118,17 +118,47 @@ class Maze:
         self.drawer.save()
 
     def print_grid(self, current):
-        rows = []
-        for row in self.grid:
-            l = ''
-            for c in row:
-                if c.visited:
-                    l = f'{l}.'
-                else:
-                    l = f'{l} '
-            rows.append(l)
-        rows[current.y] = rows[current.y][0:current.x] + '+' + rows[current.y][current.x+1:]
-        print('+----------+')
-        for row in rows:
-            print(f'|{row}|')
-        print('+----------+')
+        ul = u'\u250f'
+        ur = u'\u2513'
+        dl = u'\u2517'
+        dr = u'\u251b'
+        v = u'\u2503'
+        h = u'\u2501'
+        hl = u'\u252b'
+        hr = u'\u2523'
+        vu = u'\u253b'
+        vd = u'\u2533'
+        curr = u'\u25cf'
+        vstd = u'\u25aa'
+        local_grid = [' '] * (self.height * 3 + 2)
+        for row in range(len(local_grid)):
+            local_grid[row] = [' '] * (self.width * 3 + 2)
+        for row in range(self.height):
+            for col in range(self.width):
+                cell = self.grid[col][row]
+                x = row * 3 + 2
+                y = col * 3 + 2
+                local_grid[y][x] = vstd if cell.visited else ' '
+                if cell.walls['top']:
+                    local_grid[y-1][x-1] = ul
+                    local_grid[y-1][x] = h
+                    local_grid[y-1][x+1] = ur
+                if cell.walls['bottom']:
+                    local_grid[y+1][x-1] = dl
+                    local_grid[y+1][x] = h
+                    local_grid[y+1][x+1] = dr
+                if cell.walls['left']:
+                    local_grid[y][x-1] = v
+                if cell.walls['right']:
+                    local_grid[y][x+1] = v
+
+        local_grid[0][0] = ul
+        local_grid[0][self.width*3+1] = ur
+        local_grid[self.height*3+1][0] = dl
+        local_grid[self.height*3+1][self.width*3+1] = dr
+        partial_result = ''
+        for row in local_grid:
+            partial_result = partial_result + ''.join(x for x in row) + '\n'
+        result = ''.join(x for x in partial_result)
+        print(result)
+        time.sleep(1)

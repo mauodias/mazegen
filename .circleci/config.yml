@@ -1,0 +1,51 @@
+version: 2.1
+
+executors:
+  terraform:
+    docker:
+      - image: hashicorp/terraform:light
+  zip:
+    docker:
+      - image: kramos/alpine-zip:latest
+
+jobs:
+  package_files:
+    executor: zip
+    steps:
+      - checkout
+      - run:
+          name: Zip function files
+          command: mazegen.zip * -D
+      - persist_to_workspace:
+          root: /root
+          paths:
+            - project
+  terraform_plan:
+    executor: terraform
+    steps:
+      - run:
+          name: Terraform Plan
+          command: init && terraform plan
+      - attach_workspace:
+          at: /root
+
+  terraform_apply:
+    executor: terraform
+    steps:
+      - run:
+          name: Terraform Apply
+          command: apply
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - package_files:
+      - terraform_plan:
+          context: gcp
+          requires:
+            - package_files
+      - terraform_apply:
+          context: gcp
+          requires:
+            - terraform_plan
