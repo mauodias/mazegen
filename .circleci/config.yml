@@ -7,7 +7,7 @@ executors:
 
   zip:
     docker:
-      - image: kramos/alpine-zip:latest
+      - image: mauodias/alpine-zip:latest
 
 jobs:
   package_files:
