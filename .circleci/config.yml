@@ -21,6 +21,7 @@ jobs:
           root: /root
           paths:
             - project
+
   terraform_plan:
     executor: terraform
     steps:
