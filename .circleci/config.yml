@@ -26,7 +26,7 @@ jobs:
     steps:
       - run:
           name: Terraform Plan
-          command: init && terraform plan
+          command: terraform init && terraform plan
       - attach_workspace:
           at: /root
 
@@ -35,7 +35,7 @@ jobs:
     steps:
       - run:
           name: Terraform Apply
-          command: apply
+          command: terraform apply
       - attach_workspace:
           at: /root
 
