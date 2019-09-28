@@ -4,12 +4,10 @@ executors:
   terraform:
     docker:
       - image: hashicorp/terraform:light
-    working_directory: /
 
   zip:
     docker:
       - image: kramos/alpine-zip:latest
-    working_directory: /
 
 jobs:
   package_files:
@@ -30,7 +28,7 @@ jobs:
           name: Terraform Plan
           command: init && terraform plan
       - attach_workspace:
-          at: /root
+          at: root
 
   terraform_apply:
     executor: terraform
