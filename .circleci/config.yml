@@ -18,7 +18,7 @@ jobs:
           name: Zip function files
           command: zip mazegen.zip * -D
       - persist_to_workspace:
-          root: root
+          root: /root
           paths:
             - project
   terraform_plan:
@@ -28,7 +28,7 @@ jobs:
           name: Terraform Plan
           command: init && terraform plan
       - attach_workspace:
-          at: root
+          at: /root
 
   terraform_apply:
     executor: terraform
@@ -36,6 +36,8 @@ jobs:
       - run:
           name: Terraform Apply
           command: apply
+      - attach_workspace:
+          at: /root
 
 workflows:
   version: 2
