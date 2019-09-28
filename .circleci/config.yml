@@ -15,7 +15,7 @@ jobs:
       - checkout
       - run:
           name: Zip function files
-          command: mazegen.zip * -D
+          command: zip mazegen.zip * -D
       - persist_to_workspace:
           root: /root
           paths:
