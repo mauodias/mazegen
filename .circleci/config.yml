@@ -4,9 +4,12 @@ executors:
   terraform:
     docker:
       - image: hashicorp/terraform:light
+    working_directory: /
+
   zip:
     docker:
       - image: kramos/alpine-zip:latest
+    working_directory: /
 
 jobs:
   package_files:
@@ -17,7 +20,7 @@ jobs:
           name: Zip function files
           command: zip mazegen.zip * -D
       - persist_to_workspace:
-          root: /root
+          root: root
           paths:
             - project
   terraform_plan:
