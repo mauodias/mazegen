@@ -25,11 +25,11 @@ jobs:
   terraform_plan:
     executor: terraform
     steps:
+      - attach_workspace:
+          at: /root
       - run:
           name: Terraform Plan
           command: terraform init && terraform plan
-      - attach_workspace:
-          at: /root/project
 
   terraform_apply:
     executor: terraform
