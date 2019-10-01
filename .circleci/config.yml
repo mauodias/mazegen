@@ -25,7 +25,7 @@ jobs:
           at: /root
       - run:
           name: Terraform Apply
-          command: terraform apply --var-file terraform.tfvars
+          command: terraform apply --var-file terraform.tfvars --auto-approve
 
 workflows:
   version: 2
