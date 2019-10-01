@@ -4,31 +4,33 @@ executors:
   terraform:
     docker:
       - image: hashicorp/terraform:light
+
 jobs:
   terraform_plan:
     executor: terraform
     steps:
-      - attach_workspace:
-          at: /root
       - run:
           name: Terraform Plan
           command: terraform init && terraform plan --var-file terraform.tfvars
+      - persist_to_workspace:
+          root: /root
+          paths:
+            - project
 
   terraform_apply:
     executor: terraform
     steps:
+      - attach_workspace:
+          at: /root
       - run:
           name: Terraform Apply
           command: terraform apply --var-file terraform.tfvars
-      - attach_workspace:
-          at: /root
 
 workflows:
   version: 2
   deploy:
     jobs:
-      - terraform_plan:
+      - terraform_plan
       - terraform_apply:
-          context: gcp
           requires:
             - terraform_plan
