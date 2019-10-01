@@ -109,4 +109,6 @@ dmypy.json
 
 # Output
 .svg
-# End of https://www.gitignore.io/api/python
+
+# Terraform
+.terraform/
