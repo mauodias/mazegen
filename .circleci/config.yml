@@ -9,6 +9,7 @@ jobs:
   terraform_plan:
     executor: terraform
     steps:
+      - checkout
       - run:
           name: Terraform Plan
           command: terraform init && terraform plan --var-file terraform.tfvars
