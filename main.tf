@@ -29,4 +29,5 @@ resource "google_cloudfunctions_function" "application_function" {
   entry_point           = "generate"
   trigger_http          = true
   runtime               = "python37"
+
 }
