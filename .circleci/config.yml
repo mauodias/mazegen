@@ -4,24 +4,7 @@ executors:
   terraform:
     docker:
       - image: hashicorp/terraform:light
-
-  zip:
-    docker:
-      - image: mauodias/alpine-zip:latest
-
 jobs:
-  package_files:
-    executor: zip
-    steps:
-      - checkout
-      - run:
-          name: Zip function files
-          command: zip mazegen.zip * -D
-      - persist_to_workspace:
-          root: /root
-          paths:
-            - project
-
   terraform_plan:
     executor: terraform
     steps:
@@ -29,14 +12,14 @@ jobs:
           at: /root
       - run:
           name: Terraform Plan
-          command: cd terraform && terraform init && terraform plan
+          command: terraform init && terraform plan --var-file terraform.tfvars
 
   terraform_apply:
     executor: terraform
     steps:
       - run:
           name: Terraform Apply
-          command: terraform apply
+          command: terraform apply --var-file terraform.tfvars
       - attach_workspace:
           at: /root
 
@@ -44,11 +27,7 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - package_files
       - terraform_plan:
-          context: gcp
-          requires:
-            - package_files
       - terraform_apply:
           context: gcp
           requires:
