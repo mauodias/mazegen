@@ -10,21 +10,16 @@ def run(rows=40, cols=40, cell_size=10, initial_x=0, initial_y=0, final_x=20, fi
     drawer = draw.Drawer('temp.svg')
     m = maze.Maze(rows, cols, cell_size, drawer)
     m.generate(initial_x, initial_y, final_x, final_y)
-    m.draw()
-    out = open('temp.svg').read()
+    out = m.draw()
     return out
-
-def clean():
-    os.remove('temp.svg')
 
 def entry(request):
     svg = run()
-    clean()
     return svg
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        run()
+        print(run())
     elif len(sys.argv) == 9:
         rows = sys.argv[1]
         cols = sys.argv[2]

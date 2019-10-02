@@ -115,7 +115,7 @@ class Maze:
                     endx = startx + self.cell_size
                     endy = starty
                     self.drawer.line(startx, starty, endx, endy)
-        self.drawer.save()
+        return self.drawer.get_contents()
 
     def print_grid(self, current):
         ul = u'\u250f'
