@@ -33,7 +33,7 @@ resource "google_cloudfunctions_function" "application_function" {
   source_archive_bucket = "${google_storage_bucket.application_bucket.name}"
   source_archive_object = "${google_storage_bucket_object.application_package.name}"
   timeout               = 120
-  entry_point           = "generate"
+  entry_point           = "entry"
   trigger_http          = true
   runtime               = "python37"
 }
