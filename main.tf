@@ -21,7 +21,7 @@ resource "google_storage_bucket" "application_bucket" {
 }
 
 resource "google_storage_bucket_object" "application_package" {
-  name    = "mazegen.zip"
+  name    = "${data.archive_file.app.output_base64sha256}.zip"
   bucket  = "${google_storage_bucket.application_bucket.name}"
   source  = "${path.root}/pkg/mazegen.zip"
 }
