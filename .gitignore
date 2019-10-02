@@ -112,3 +112,6 @@ dmypy.json
 
 # Terraform
 .terraform/
+
+# Virtualenv
+.venv/
