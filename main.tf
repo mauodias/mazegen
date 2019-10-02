@@ -1,3 +1,10 @@
+terraform {
+  backend "gcs" {
+    bucket = "mazegen-tf-state"
+    prefix = "terraform/state"
+  }
+}
+
 data "archive_file" "app" {
   type        = "zip"
   source_dir  = "${path.root}/app/"
