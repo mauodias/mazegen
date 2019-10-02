@@ -17,7 +17,7 @@ def run(rows=40, cols=40, cell_size=10, initial_x=0, initial_y=0, final_x=20, fi
 def clean():
     os.remove('temp.svg')
 
-def entry():
+def entry(request):
     svg = run()
     clean()
     return svg
